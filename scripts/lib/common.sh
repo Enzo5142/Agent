@@ -3,12 +3,26 @@
 
 set -euo pipefail
 
-export JARVIS_HOME="${JARVIS_HOME:-$HOME/Agent}"
-export OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main}"
-export JARVIS_LOG_DIR="${JARVIS_LOG_DIR:-$OBSIDIAN_VAULT/Jarvis/log}"
+# Expande til literal que possa vir de settings.json
+expand_tilde() {
+    case "$1" in
+        "~") echo "$HOME" ;;
+        "~/"*) echo "$HOME/${1#~/}" ;;
+        *) echo "$1" ;;
+    esac
+}
+
+export JARVIS_HOME="$(expand_tilde "${JARVIS_HOME:-$HOME/Agent}")"
+export OBSIDIAN_VAULT="$(expand_tilde "${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main}")"
+export JARVIS_LOG_DIR="$(expand_tilde "${JARVIS_LOG_DIR:-$OBSIDIAN_VAULT/Jarvis/log}")"
 export JARVIS_TMP="${JARVIS_TMP:-/tmp/jarvis}"
 
-mkdir -p "$JARVIS_LOG_DIR" "$JARVIS_TMP"
+# Só cria o log dir se o path for absoluto (evita "./~/..." de expansão literal)
+case "$JARVIS_LOG_DIR" in
+    /*) mkdir -p "$JARVIS_LOG_DIR" ;;
+    *) echo "[common.sh] JARVIS_LOG_DIR não é absoluto: $JARVIS_LOG_DIR" >&2 ;;
+esac
+mkdir -p "$JARVIS_TMP"
 
 # Carrega .env se existir
 if [ -f "$JARVIS_HOME/.env" ]; then

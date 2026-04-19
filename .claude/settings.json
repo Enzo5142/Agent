@@ -48,9 +48,9 @@
     ]
   },
   "env": {
-    "JARVIS_HOME": "~/Agent",
-    "OBSIDIAN_VAULT": "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main",
-    "JARVIS_LOG_DIR": "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main/Jarvis/log"
+    "JARVIS_HOME": "${HOME}/Agent",
+    "OBSIDIAN_VAULT": "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main",
+    "JARVIS_LOG_DIR": "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main/Jarvis/log"
   },
   "mcpServers": {
     "notion": {
