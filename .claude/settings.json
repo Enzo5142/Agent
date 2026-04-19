@@ -1,0 +1,112 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(pwd)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(echo:*)",
+      "Bash(date:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh api:*)",
+      "Bash(yt-dlp:*)",
+      "Bash(whisper:*)",
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(osascript:*)",
+      "Bash(python3 scripts/*)",
+      "Bash(bash scripts/*)",
+      "Read(~/Documents/**)",
+      "Read(~/Library/Mobile Documents/iCloud~md~obsidian/**)",
+      "Write(~/Library/Mobile Documents/iCloud~md~obsidian/**)",
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "mcp__notion__*",
+      "mcp__obsidian__*",
+      "mcp__github__*",
+      "mcp__gmail__*",
+      "mcp__gcal__*",
+      "mcp__filesystem__*"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(sudo:*)"
+    ]
+  },
+  "env": {
+    "JARVIS_HOME": "~/Agent",
+    "OBSIDIAN_VAULT": "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main",
+    "JARVIS_LOG_DIR": "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main/Jarvis/log"
+  },
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@notionhq/notion-mcp-server"],
+      "env": {
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\":\"Bearer ${NOTION_TOKEN}\",\"Notion-Version\":\"2022-06-28\"}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "gmail": {
+      "command": "npx",
+      "args": ["-y", "@gongrzhe/server-gmail-autoauth-mcp"]
+    },
+    "gcal": {
+      "command": "npx",
+      "args": ["-y", "@cocal/google-calendar-mcp"],
+      "env": {
+        "GOOGLE_OAUTH_CREDENTIALS": "${HOME}/.config/jarvis/gcal-credentials.json"
+      }
+    }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/hooks/session-stop.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

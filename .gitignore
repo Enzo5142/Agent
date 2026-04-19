@@ -1,0 +1,11 @@
+.env
+.env.local
+*.log
+*.pyc
+__pycache__/
+webhook/.venv/
+.DS_Store
+/tmp/
+node_modules/
+.idea/
+.vscode/
