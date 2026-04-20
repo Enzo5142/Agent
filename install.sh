@@ -3,6 +3,10 @@
 set -euo pipefail
 
 JARVIS_HOME="${JARVIS_HOME:-$HOME/Agent}"
+# Claude Code passa ${HOME} literal em settings.json — expande aqui
+JARVIS_HOME="${JARVIS_HOME//\$\{HOME\}/$HOME}"
+JARVIS_HOME="${JARVIS_HOME//\$HOME/$HOME}"
+case "$JARVIS_HOME" in "~") JARVIS_HOME="$HOME" ;; "~/"*) JARVIS_HOME="$HOME/${JARVIS_HOME#~/}" ;; esac
 cd "$JARVIS_HOME"
 
 say() { printf "\033[1;36m▸\033[0m %s\n" "$*"; }
@@ -53,6 +57,9 @@ fi
 
 # ---------------------------------------------------------------- estrutura Obsidian
 OBSIDIAN_VAULT="${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main}"
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT//\$\{HOME\}/$HOME}"
+OBSIDIAN_VAULT="${OBSIDIAN_VAULT//\$HOME/$HOME}"
+case "$OBSIDIAN_VAULT" in "~") OBSIDIAN_VAULT="$HOME" ;; "~/"*) OBSIDIAN_VAULT="$HOME/${OBSIDIAN_VAULT#~/}" ;; esac
 if [ -d "$OBSIDIAN_VAULT" ]; then
     say "Criando estrutura no Obsidian..."
     for dir in \

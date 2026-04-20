@@ -9,3 +9,4 @@ webhook/.venv/
 node_modules/
 .idea/
 .vscode/
+/.notion-dbs.env

@@ -3,18 +3,22 @@
 
 set -euo pipefail
 
-# Expande til literal que possa vir de settings.json
-expand_tilde() {
-    case "$1" in
-        "~") echo "$HOME" ;;
-        "~/"*) echo "$HOME/${1#~/}" ;;
-        *) echo "$1" ;;
+# Expande ~ e ${HOME}/$HOME literais que possam vir de settings.json
+# (Claude Code passa ${HOME} literal, sem expandir)
+expand_home() {
+    local v="$1"
+    v="${v//\$\{HOME\}/$HOME}"
+    v="${v//\$HOME/$HOME}"
+    case "$v" in
+        "~") v="$HOME" ;;
+        "~/"*) v="$HOME/${v#~/}" ;;
     esac
+    echo "$v"
 }
 
-export JARVIS_HOME="$(expand_tilde "${JARVIS_HOME:-$HOME/Agent}")"
-export OBSIDIAN_VAULT="$(expand_tilde "${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main}")"
-export JARVIS_LOG_DIR="$(expand_tilde "${JARVIS_LOG_DIR:-$OBSIDIAN_VAULT/Jarvis/log}")"
+export JARVIS_HOME="$(expand_home "${JARVIS_HOME:-$HOME/Agent}")"
+export OBSIDIAN_VAULT="$(expand_home "${OBSIDIAN_VAULT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main}")"
+export JARVIS_LOG_DIR="$(expand_home "${JARVIS_LOG_DIR:-$OBSIDIAN_VAULT/Jarvis/log}")"
 export JARVIS_TMP="${JARVIS_TMP:-/tmp/jarvis}"
 
 # Só cria o log dir se o path for absoluto (evita "./~/..." de expansão literal)
@@ -29,6 +33,14 @@ if [ -f "$JARVIS_HOME/.env" ]; then
     set -a
     # shellcheck disable=SC1091
     source "$JARVIS_HOME/.env"
+    set +a
+fi
+
+# Carrega IDs das databases do Notion (gerado por jarvis_create_dbs.sh)
+if [ -f "$JARVIS_HOME/.notion-dbs.env" ]; then
+    set -a
+    # shellcheck disable=SC1091
+    source "$JARVIS_HOME/.notion-dbs.env"
     set +a
 fi
 

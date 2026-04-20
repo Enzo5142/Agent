@@ -49,42 +49,29 @@
   },
   "env": {
     "JARVIS_HOME": "${HOME}/Agent",
-    "OBSIDIAN_VAULT": "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main",
-    "JARVIS_LOG_DIR": "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main/Jarvis/log"
+    "OBSIDIAN_VAULT": "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Enzo Vault",
+    "JARVIS_LOG_DIR": "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Enzo Vault/Jarvis/log"
   },
   "mcpServers": {
     "notion": {
-      "command": "npx",
-      "args": ["-y", "@notionhq/notion-mcp-server"],
-      "env": {
-        "OPENAPI_MCP_HEADERS": "{\"Authorization\":\"Bearer ${NOTION_TOKEN}\",\"Notion-Version\":\"2022-06-28\"}"
-      }
+      "command": "bash",
+      "args": ["scripts/mcp/notion.sh"]
     },
     "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/Main"
-      ]
+      "command": "bash",
+      "args": ["scripts/mcp/filesystem.sh"]
     },
     "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      }
+      "command": "bash",
+      "args": ["scripts/mcp/github.sh"]
     },
     "gmail": {
-      "command": "npx",
-      "args": ["-y", "@gongrzhe/server-gmail-autoauth-mcp"]
+      "command": "bash",
+      "args": ["scripts/mcp/gmail.sh"]
     },
     "gcal": {
-      "command": "npx",
-      "args": ["-y", "@cocal/google-calendar-mcp"],
-      "env": {
-        "GOOGLE_OAUTH_CREDENTIALS": "${HOME}/.config/jarvis/gcal-credentials.json"
-      }
+      "command": "bash",
+      "args": ["scripts/mcp/gcal.sh"]
     }
   },
   "hooks": {

@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "notion": {
+      "command": "bash",
+      "args": ["scripts/mcp/notion.sh"]
+    },
+    "filesystem": {
+      "command": "bash",
+      "args": ["scripts/mcp/filesystem.sh"]
+    },
+    "github": {
+      "command": "bash",
+      "args": ["scripts/mcp/github.sh"]
+    },
+    "gmail": {
+      "command": "bash",
+      "args": ["scripts/mcp/gmail.sh"]
+    },
+    "gcal": {
+      "command": "bash",
+      "args": ["scripts/mcp/gcal.sh"]
+    }
+  }
+}
