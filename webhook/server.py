@@ -112,6 +112,28 @@ async def finance(
     return JSONResponse(_run("finance-add.sh", text))
 
 
+@app.post("/finance/upload")
+async def finance_upload(
+    file: UploadFile = File(...),
+    x_jarvis_token: str | None = Header(None),
+) -> JSONResponse:
+    """Recebe PDF/XLS de extrato ou fatura, salva em finance-inbox/,
+    dispara finance-import.sh e retorna resumo.
+    """
+    _auth(x_jarvis_token)
+    inbox = JARVIS_HOME / "finance-inbox"
+    inbox.mkdir(parents=True, exist_ok=True)
+    # Nome sanitizado, prefixado com uuid curto pra evitar colisão
+    safe_name = f"{uuid.uuid4().hex[:8]}-{Path(file.filename or 'upload').name}"
+    dest = inbox / safe_name
+    with dest.open("wb") as f:
+        shutil.copyfileobj(file.file, f)
+    # Roda import. Se timeout (600s) ou erro, retorna os logs.
+    result = _run("finance-import.sh")
+    result["uploaded"] = safe_name
+    return JSONResponse(result)
+
+
 @app.post("/issue")
 async def issue(
     repo: str = Form(...),

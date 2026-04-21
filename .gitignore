@@ -10,3 +10,8 @@ node_modules/
 .idea/
 .vscode/
 /.notion-dbs.env
+
+# Finance local data
+/finance-inbox/
+/finance-archive/
+.notion-finance-maps.json
