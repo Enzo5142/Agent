@@ -3,6 +3,10 @@
 
 set -euo pipefail
 
+# Garante PATH completo. launchd dá PATH mínimo — sem isto o `claude` CLI
+# (instalado em ~/.local/bin) e `npx` (Homebrew) somem em jobs agendados.
+export PATH="$HOME/.local/bin:$HOME/.bun/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
 # Expande ~ e ${HOME}/$HOME literais que possam vir de settings.json
 # (Claude Code passa ${HOME} literal, sem expandir)
 expand_home() {
